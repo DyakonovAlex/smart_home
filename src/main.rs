@@ -1,10 +1,10 @@
-mod device;
+mod devices;
 
 fn main() {
     println!("Умный дом запущен!");
 
-    let mut smart_socket = device::smart_socket::SmartSocket::new(1, "Кухня 1", 100);
-    let mut thermometer = device::thermometer::Thermometer::new(1, "Кухня 1", 25.0);
+    let mut smart_socket = devices::socket::Socket::new(1, "Кухня 1", 100);
+    let mut thermometer = devices::thermometer::Thermometer::new(1, "Кухня 1", 25.0);
 
     println!("{}", smart_socket.description());
     println!("{}", thermometer.description());

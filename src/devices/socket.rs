@@ -1,11 +1,11 @@
-pub struct SmartSocket {
+pub struct Socket {
     _id: u32,
     name: String,
     power_consumption: u32,
     is_on: bool,
 }
 
-impl SmartSocket {
+impl Socket {
     pub fn new(id: u32, name: &str, power_consumption: u32) -> Self {
         Self {
             _id: id,
@@ -37,7 +37,7 @@ impl SmartSocket {
 
     pub fn description(&self) -> String {
         format!(
-            "SmartSocket: {}, Power Consumption: {}, On: {}",
+            "Socket: {}, Power Consumption: {}, On: {}",
             self.name, self.power_consumption, self.is_on
         )
     }
