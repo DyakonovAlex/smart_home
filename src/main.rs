@@ -1,12 +1,6 @@
-mod devices;
-mod models;
-mod services;
-
-use crate::devices::socket::Socket;
-use crate::devices::thermometer::Thermometer;
-use crate::models::house::House;
-use crate::models::room::Room;
-use crate::services::device_info::DeviceInfo;
+use smart_home::devices::{socket::Socket, thermometer::Thermometer};
+use smart_home::models::{house::House, room::Room};
+use smart_home::services::device_info::DeviceInfo;
 
 fn main() {
     let mut house = House::new("Домик у реки");

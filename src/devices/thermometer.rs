@@ -15,11 +15,11 @@ impl Thermometer {
         &self.name
     }
 
-    pub fn _get_temp(&self) -> f64 {
+    pub fn get_temp(&self) -> f64 {
         self.temperature
     }
 
-    pub fn _set_temp(&mut self, temperature: f64) {
+    pub fn set_temp(&mut self, temperature: f64) {
         self.temperature = temperature;
     }
 
@@ -28,5 +28,31 @@ impl Thermometer {
             "Термометр: {}, Температура: {}",
             self.name, self.temperature
         )
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_thermometer_new() {
+        let thermometer = Thermometer::new("Thermometer", 25.5);
+        assert_eq!(thermometer.get_name(), "Thermometer");
+        assert_eq!(thermometer.get_temp(), 25.5);
+    }
+
+    #[test]
+    fn test_thermometer_set_temperature() {
+        let mut thermometer = Thermometer::new("Thermometer", 0.0);
+        thermometer.set_temp(25.5);
+        assert_eq!(thermometer.get_temp(), 25.5);
+    }
+
+    #[test]
+    fn test_thermometer_description() {
+        let thermometer = Thermometer::new("Thermometer", 25.5);
+        let expected_description = "Термометр: Thermometer, Температура: 25.5";
+        assert_eq!(thermometer.description(), expected_description);
     }
 }

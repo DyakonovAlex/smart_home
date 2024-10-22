@@ -25,3 +25,23 @@ impl Room {
         &self.name
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_room_new() {
+        let room = Room::new("Room");
+        assert_eq!(room.get_name(), "Room");
+        assert!(room.get_devices().is_empty());
+    }
+
+    #[test]
+    fn test_room_add_device() {
+        let mut room = Room::new("Room");
+        room.add_device("Device");
+        assert_eq!(room.get_devices().len(), 1);
+        assert!(room.get_devices().contains("Device"));
+    }
+}
