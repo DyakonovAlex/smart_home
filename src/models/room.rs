@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+#[derive(Debug, PartialEq)]
 pub struct Room {
     name: String,
     devices: HashSet<String>,
@@ -21,11 +22,14 @@ impl Room {
         &self.devices
     }
 
+    pub fn get_device(&self, device_name: &str) -> Option<&str> {
+        self.devices.get(device_name).map(|s| s.as_str())
+    }
+
     pub fn get_name(&self) -> &str {
         &self.name
     }
 }
-
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -43,5 +47,18 @@ mod tests {
         room.add_device("Device");
         assert_eq!(room.get_devices().len(), 1);
         assert!(room.get_devices().contains("Device"));
+    }
+
+    #[test]
+    fn test_room_get_device_found() {
+        let mut room = Room::new("Room");
+        room.add_device("Device");
+        assert_eq!(room.get_device("Device"), Some("Device"));
+    }
+
+    #[test]
+    fn test_room_get_device_not_found() {
+        let room = Room::new("Room");
+        assert_eq!(room.get_device("Device"), None);
     }
 }

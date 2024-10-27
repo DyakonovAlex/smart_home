@@ -1,16 +1,27 @@
+use crate::devices::errors::DeviceError;
+
 pub struct Socket {
     name: String,
-    power_consumption: u32,
+    power_consumption: u32, // Мощность потребления в ваттах
     is_on: bool,
 }
 
 impl Socket {
-    pub fn new(name: &str, power_consumption: u32) -> Self {
-        Self {
+    fn validate_power(power_consumption: u32) -> Result<(), DeviceError> {
+        if power_consumption > 5000 {
+            return Err(DeviceError::InvalidSocketPower(power_consumption));
+        }
+        Ok(())
+    }
+
+    pub fn new(name: &str, power_consumption: u32) -> Result<Self, DeviceError> {
+        Self::validate_power(power_consumption)?;
+
+        Ok(Self {
             name: name.to_string(),
             power_consumption,
             is_on: false,
-        }
+        })
     }
 
     pub fn get_name(&self) -> &str {
@@ -29,8 +40,12 @@ impl Socket {
         self.power_consumption
     }
 
-    pub fn set_power(&mut self, power_consumption: u32) {
+    pub fn set_power(&mut self, power_consumption: u32) -> Result<(), DeviceError> {
+        Self::validate_power(power_consumption)?;
+
         self.power_consumption = power_consumption;
+
+        Ok(())
     }
 
     pub fn is_on(&self) -> bool {
@@ -46,42 +61,57 @@ impl Socket {
 }
 #[cfg(test)]
 mod tests {
+    use crate::devices::errors::{SOCKET_CREATION_ERROR, SOCKET_POWER_ERROR};
+
     use super::*;
 
     #[test]
-    fn test_socket_new() {
-        let socket = Socket::new("Socket", 220);
+    fn test_socket_new_valid() {
+        let socket = Socket::new("Socket", 3520).expect(SOCKET_CREATION_ERROR);
         assert_eq!(socket.get_name(), "Socket");
-        assert_eq!(socket.get_power(), 220);
+        assert_eq!(socket.get_power(), 3520);
         assert!(!socket.is_on());
     }
 
     #[test]
     fn test_socket_turn_on() {
-        let mut socket = Socket::new("Socket", 220);
+        let mut socket = Socket::new("Socket", 3520).expect(SOCKET_CREATION_ERROR);
         socket.turn_on();
         assert!(socket.is_on());
     }
 
     #[test]
     fn test_socket_turn_off() {
-        let mut socket = Socket::new("Socket", 220);
+        let mut socket = Socket::new("Socket", 3520).expect(SOCKET_CREATION_ERROR);
         socket.turn_on();
         socket.turn_off();
         assert!(!socket.is_on());
     }
 
     #[test]
-    fn test_socket_set_power() {
-        let mut socket = Socket::new("Socket", 110);
-        socket.set_power(220);
-        assert_eq!(socket.get_power(), 220);
+    fn test_socket_set_power_valid() {
+        let mut socket = Socket::new("Socket", 0).expect(SOCKET_CREATION_ERROR);
+        socket.set_power(3520).expect(SOCKET_POWER_ERROR);
+        assert_eq!(socket.get_power(), 3520);
     }
 
     #[test]
     fn test_socket_description() {
-        let socket = Socket::new("Socket", 220);
-        let expected_description = "Умная розетка: Socket, Потребляемая мощность: 220, Вкл: false";
+        let socket = Socket::new("Socket", 3520).expect(SOCKET_CREATION_ERROR);
+        let expected_description = "Умная розетка: Socket, Потребляемая мощность: 3520, Вкл: false";
         assert_eq!(socket.description(), expected_description);
+    }
+
+    #[test]
+    fn test_socket_new_invalid() {
+        let result = Socket::new("Socket", 6000);
+        assert!(result.is_err());
+    }
+
+    #[test]
+    fn test_socket_set_power_invalid() {
+        let mut socket = Socket::new("Socket", 0).expect(SOCKET_CREATION_ERROR);
+        let result = socket.set_power(6000);
+        assert!(result.is_err());
     }
 }

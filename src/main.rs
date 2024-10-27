@@ -1,3 +1,4 @@
+use smart_home::devices::errors::{SOCKET_CREATION_ERROR, THERMOMETER_CREATION_ERROR};
 use smart_home::devices::{socket::Socket, thermometer::Thermometer};
 use smart_home::models::{house::House, room::Room};
 use smart_home::services::device_info::DeviceInfo;
@@ -7,10 +8,10 @@ fn main() {
 
     // Создаем первую комнату - Гостиная
     let mut living_room = Room::new("Гостиная");
-    let socket1 = Socket::new("Розетка 1", 100);
-    let socket2 = Socket::new("Розетка 2", 150);
-    let thermometer1 = Thermometer::new("Термометр 1", 22.5);
-    let thermometer2 = Thermometer::new("Термометр 2", 23.0);
+    let socket1 = Socket::new("Розетка 1", 3520).expect(SOCKET_CREATION_ERROR);
+    let socket2 = Socket::new("Розетка 2", 2200).expect(SOCKET_CREATION_ERROR);
+    let thermometer1 = Thermometer::new("Термометр 1", 22.5).expect(THERMOMETER_CREATION_ERROR);
+    let thermometer2 = Thermometer::new("Термометр 2", 23.0).expect(THERMOMETER_CREATION_ERROR);
 
     living_room.add_device(socket1.get_name());
     living_room.add_device(socket2.get_name());
@@ -21,8 +22,8 @@ fn main() {
 
     // Создаем вторую комнату - Спальня
     let mut bedroom = Room::new("Спальня");
-    let socket3 = Socket::new("Розетка 3", 120);
-    let thermometer3 = Thermometer::new("Термометр 3", 21.0);
+    let socket3 = Socket::new("Розетка 3", 2200).expect(SOCKET_CREATION_ERROR);
+    let thermometer3 = Thermometer::new("Термометр 3", 21.0).expect(THERMOMETER_CREATION_ERROR);
 
     bedroom.add_device(socket3.get_name());
     bedroom.add_device(thermometer3.get_name());
@@ -31,8 +32,8 @@ fn main() {
 
     // Создаем третью комнату - Кухня
     let mut kitchen = Room::new("Кухня");
-    let socket4 = Socket::new("Розетка 4", 130);
-    let thermometer4 = Thermometer::new("Термометр 4", 24.0);
+    let socket4 = Socket::new("Розетка 4", 3500).expect(SOCKET_CREATION_ERROR);
+    let thermometer4 = Thermometer::new("Термометр 4", 24.0).expect(THERMOMETER_CREATION_ERROR);
 
     kitchen.add_device(socket4.get_name());
     kitchen.add_device(thermometer4.get_name());

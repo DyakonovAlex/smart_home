@@ -27,15 +27,20 @@ impl House {
         &self.rooms
     }
 
+    pub fn get_room(&self, room_name: &str) -> Option<&Room> {
+        self.rooms.get(room_name)
+    }
+
     pub fn create_report(&self, info: &impl DeviceInfoProvider) -> String {
         let mut report = format!("Отчет по дому {}\n", self.name);
         for (room_name, room) in &self.rooms {
             report.push_str(&format!("\tКомната: {}\n", room_name));
             for device_name in room.get_devices() {
-                report.push_str(&format!(
-                    "\t\t- {}\n",
-                    &info.get_device_info(room_name.clone(), device_name.clone())
-                ));
+                let device_info = info.get_device_info(room_name.clone(), device_name.clone());
+                match device_info {
+                    Ok(info) => report.push_str(&format!("\t\t- {}\n", info)),
+                    Err(e) => report.push_str(&format!("\t\t- Error: {:?}\n", e)),
+                }
             }
             report.push('\n');
         }
@@ -45,13 +50,19 @@ impl House {
 
 #[cfg(test)]
 mod tests {
+    use crate::devices::errors::DeviceError;
+
     use super::*;
 
     struct MockDeviceInfoProvider;
 
     impl DeviceInfoProvider for MockDeviceInfoProvider {
-        fn get_device_info(&self, _room_name: String, device_name: String) -> String {
-            format!("Информация о устройстве: {}", device_name)
+        fn get_device_info(
+            &self,
+            _room_name: String,
+            device_name: String,
+        ) -> Result<String, DeviceError> {
+            Ok(format!("Информация о устройстве: {}", device_name))
         }
     }
 
@@ -84,5 +95,23 @@ mod tests {
         let expected_report =
             "Отчет по дому House\n\tКомната: Room\n\t\t- Информация о устройстве: Socket\n\n";
         assert_eq!(report, expected_report);
+    }
+
+    #[test]
+    fn test_house_get_room_found() {
+        let mut house = House::new("House");
+        let room = Room::new("Room");
+        house.add_room(room);
+
+        let result = house.get_room("Room");
+        assert!(result.is_some());
+        assert_eq!(result.unwrap().get_name(), "Room");
+    }
+
+    #[test]
+    fn test_house_get_room_not_found() {
+        let house = House::new("House");
+        let result = house.get_room("Room");
+        assert!(result.is_none());
     }
 }
