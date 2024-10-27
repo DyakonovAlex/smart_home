@@ -23,6 +23,10 @@ impl House {
         self.rooms.insert(room.get_name().to_string(), room);
     }
 
+    pub fn remove_room(&mut self, room_name: &str) {
+        self.rooms.remove(room_name);
+    }
+
     pub fn get_rooms(&self) -> &HashMap<String, Room> {
         &self.rooms
     }
@@ -113,5 +117,23 @@ mod tests {
         let house = House::new("House");
         let result = house.get_room("Room");
         assert!(result.is_none());
+    }
+
+    #[test]
+    fn test_house_remove_room() {
+        let mut house = House::new("House");
+        let room1 = Room::new("Living Room");
+        let room2 = Room::new("Bedroom");
+
+        house.add_room(room1);
+        house.add_room(room2);
+
+        assert_eq!(house.get_rooms().len(), 2);
+
+        house.remove_room("Living Room");
+
+        assert_eq!(house.get_rooms().len(), 1);
+        assert!(house.get_room("Living Room").is_none());
+        assert!(house.get_room("Bedroom").is_some());
     }
 }
