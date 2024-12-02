@@ -1,5 +1,6 @@
 use crate::devices::error::DeviceError;
 
+#[derive(Debug, Clone)]
 pub struct Socket {
     name: String,
     power: u32, // Мощность потребления в ваттах
@@ -7,13 +8,23 @@ pub struct Socket {
 }
 
 impl Socket {
+    pub const MAX_POWER: u32 = 5000;
+
     fn validate_power(power: u32) -> Result<(), DeviceError> {
-        if power > 5000 {
+        if power > Self::MAX_POWER {
             return Err(DeviceError::InvalidSocketPower(power));
         }
         Ok(())
     }
 
+    /// Creates a new Socket with the specified name and power consumption
+    ///
+    /// # Arguments
+    /// * `name` - The name of the socket
+    /// * `power` - Power consumption in watts
+    ///
+    /// # Returns
+    /// * `Result<Socket, DeviceError>` - A new socket or an error if power is invalid
     pub fn new(name: &str, power: u32) -> Result<Self, DeviceError> {
         Self::validate_power(power)?;
 

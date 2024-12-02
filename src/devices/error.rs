@@ -28,3 +28,9 @@ impl std::fmt::Display for DeviceError {
 }
 
 impl std::error::Error for DeviceError {}
+
+impl From<std::io::Error> for DeviceError {
+    fn from(err: std::io::Error) -> Self {
+        DeviceError::NotFound(err.to_string())
+    }
+}

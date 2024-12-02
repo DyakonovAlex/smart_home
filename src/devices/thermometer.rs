@@ -1,18 +1,21 @@
 use crate::devices::error::DeviceError;
 
+#[derive(Debug, Clone)]
 pub struct Thermometer {
     name: String,
     temperature: f64,
 }
 
 impl Thermometer {
+    pub const MIN_TEMPERATURE: f64 = -273.15;
+    pub const MAX_TEMPERATURE: f64 = 100.0;
+
     fn validate_temperature(temperature: f64) -> Result<(), DeviceError> {
-        if !(-273.15..=100.0).contains(&temperature) {
+        if !(Self::MIN_TEMPERATURE..=Self::MAX_TEMPERATURE).contains(&temperature) {
             return Err(DeviceError::InvalidThermometerTemperature(temperature));
         }
         Ok(())
     }
-
     pub fn new(name: &str, temperature: f64) -> Result<Self, DeviceError> {
         Self::validate_temperature(temperature)?;
 
