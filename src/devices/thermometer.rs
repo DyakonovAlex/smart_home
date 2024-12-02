@@ -1,4 +1,4 @@
-use crate::devices::errors::DeviceError;
+use crate::devices::error::DeviceError;
 
 pub struct Thermometer {
     name: String,
@@ -49,7 +49,7 @@ impl Thermometer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::devices::errors::{THERMOMETER_CREATION_ERROR, THERMOMETER_TEMP_ERROR};
+    use crate::devices::error::{THERMOMETER_CREATION_ERROR, THERMOMETER_TEMP_ERROR};
 
     #[test]
     fn test_thermometer_new_valid() {

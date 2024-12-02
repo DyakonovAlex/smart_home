@@ -1,5 +1,5 @@
 use crate::devices::{
-    device_info_provider::DeviceInfoProvider, errors::DeviceError, socket::Socket,
+    device_info_provider::DeviceInfoProvider, error::DeviceError, socket::Socket,
     thermometer::Thermometer,
 };
 
@@ -42,7 +42,7 @@ impl DeviceInfoProvider for DeviceInfo<'_, '_> {
 
 #[cfg(test)]
 mod tests {
-    use crate::devices::errors::{SOCKET_CREATION_ERROR, THERMOMETER_CREATION_ERROR};
+    use crate::devices::error::{SOCKET_CREATION_ERROR, THERMOMETER_CREATION_ERROR};
 
     use super::*;
 

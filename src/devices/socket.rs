@@ -1,25 +1,25 @@
-use crate::devices::errors::DeviceError;
+use crate::devices::error::DeviceError;
 
 pub struct Socket {
     name: String,
-    power_consumption: u32, // Мощность потребления в ваттах
+    power: u32, // Мощность потребления в ваттах
     is_on: bool,
 }
 
 impl Socket {
-    fn validate_power(power_consumption: u32) -> Result<(), DeviceError> {
-        if power_consumption > 5000 {
-            return Err(DeviceError::InvalidSocketPower(power_consumption));
+    fn validate_power(power: u32) -> Result<(), DeviceError> {
+        if power > 5000 {
+            return Err(DeviceError::InvalidSocketPower(power));
         }
         Ok(())
     }
 
-    pub fn new(name: &str, power_consumption: u32) -> Result<Self, DeviceError> {
-        Self::validate_power(power_consumption)?;
+    pub fn new(name: &str, power: u32) -> Result<Self, DeviceError> {
+        Self::validate_power(power)?;
 
         Ok(Self {
             name: name.to_string(),
-            power_consumption,
+            power,
             is_on: false,
         })
     }
@@ -37,13 +37,13 @@ impl Socket {
     }
 
     pub fn get_power(&self) -> u32 {
-        self.power_consumption
+        self.power
     }
 
-    pub fn set_power(&mut self, power_consumption: u32) -> Result<(), DeviceError> {
-        Self::validate_power(power_consumption)?;
+    pub fn set_power(&mut self, power: u32) -> Result<(), DeviceError> {
+        Self::validate_power(power)?;
 
-        self.power_consumption = power_consumption;
+        self.power = power;
 
         Ok(())
     }
@@ -55,13 +55,13 @@ impl Socket {
     pub fn description(&self) -> String {
         format!(
             "Умная розетка: {}, Потребляемая мощность: {}, Вкл: {}",
-            self.name, self.power_consumption, self.is_on
+            self.name, self.power, self.is_on
         )
     }
 }
 #[cfg(test)]
 mod tests {
-    use crate::devices::errors::{SOCKET_CREATION_ERROR, SOCKET_POWER_ERROR};
+    use crate::devices::error::{SOCKET_CREATION_ERROR, SOCKET_POWER_ERROR};
 
     use super::*;
 

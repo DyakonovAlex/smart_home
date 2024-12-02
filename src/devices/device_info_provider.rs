@@ -1,4 +1,4 @@
-use crate::devices::errors::DeviceError;
+use crate::devices::error::DeviceError;
 
 pub trait DeviceInfoProvider {
     fn get_device_info(

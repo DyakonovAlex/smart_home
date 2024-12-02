@@ -54,7 +54,7 @@ impl House {
 
 #[cfg(test)]
 mod tests {
-    use crate::devices::errors::DeviceError;
+    use crate::devices::error::DeviceError;
 
     use super::*;
 

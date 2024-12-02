@@ -1,4 +1,4 @@
-use smart_home::devices::errors::{SOCKET_CREATION_ERROR, THERMOMETER_CREATION_ERROR};
+use smart_home::devices::error::{SOCKET_CREATION_ERROR, THERMOMETER_CREATION_ERROR};
 use smart_home::devices::{socket::Socket, thermometer::Thermometer};
 use smart_home::models::{house::House, room::Room};
 use smart_home::services::device_info::DeviceInfo;

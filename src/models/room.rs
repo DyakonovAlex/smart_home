@@ -1,6 +1,6 @@
 use std::collections::HashSet;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct Room {
     name: String,
     devices: HashSet<String>,

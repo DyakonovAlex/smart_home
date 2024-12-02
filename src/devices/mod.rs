@@ -1,4 +1,4 @@
 pub mod device_info_provider;
-pub mod errors;
+pub mod error;
 pub mod socket;
 pub mod thermometer;
